@@ -1,5 +1,5 @@
-import React from 'react';
 import {Grid} from '@mui/material'
+import SelectorUI from './components/SelectorUI'
 
 function App() {
   return (
@@ -23,8 +23,10 @@ function App() {
         {/* Selector */}
         <Grid 
         size={{xs:12, md:3}}
-        >Elemento: Selector</Grid>
-
+        >
+          <SelectorUI />
+        </Grid>
+        
         {/* Indicadores */}
         <Grid 
         size={{xs:12, md:9}}
