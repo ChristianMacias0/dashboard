@@ -4,9 +4,13 @@ import IndicatorUI from './components/IndicatorUI'
 import HeaderUI from './components/HeaderUI'
 import AlertUI from './components/AlertUI'
 import DataFetcher from './functions/DataFetcher'
+import TableUI from './components/TableUI'
+import ChartUI from './components/ChartUI'
+import { useState } from 'react'
 
 function App() {
-  const dataFetcherOutput = DataFetcher();
+  const [selectedCity, setSelectedCity] = useState<string>('guayaquil');
+  const dataFetcherOutput = DataFetcher(selectedCity);
   return (
     <>
       <Grid container spacing={5} justifyContent="center" alignItems="center">
@@ -23,7 +27,10 @@ function App() {
 
         {/* Selector */}
         <Grid size={{ xs: 12, md: 3 }}>
-          <SelectorUI />
+          <SelectorUI
+          selectedCity={selectedCity}
+          onCityChange={setSelectedCity}
+          />
         </Grid>
 
         {/* Indicadores */}
@@ -67,12 +74,46 @@ function App() {
 
         {/* Gráfico */}
         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
-          Elemento: Gráfico
+          <ChartUI
+            data={
+              dataFetcherOutput.data
+                ? {
+                    ...dataFetcherOutput.data,
+                    // Limita a las últimas 24 horas si hay más datos
+                    hourly: {
+                      ...dataFetcherOutput.data.hourly,
+                      time: dataFetcherOutput.data.hourly.time.slice(-50),
+                      temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                      wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                    },
+                  }
+                : null
+            }
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+          />
         </Grid>
 
         {/* Tabla */}
         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: "none", md: "block" } }}>
-          Elemento: Tabla
+          <TableUI
+            data={
+              dataFetcherOutput.data
+                ? {
+                    ...dataFetcherOutput.data,
+                    // Limita a las últimas 24 filas
+                    hourly: {
+                      ...dataFetcherOutput.data.hourly,
+                      time: dataFetcherOutput.data.hourly.time.slice(-50),
+                      temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                      wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                    },
+                  }
+                : null
+            }
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+          />
         </Grid>
 
         {/* Información adicional */}
