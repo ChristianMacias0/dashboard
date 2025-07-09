@@ -4,6 +4,8 @@ import IndicatorUI from './components/IndicatorUI'
 import HeaderUI from './components/HeaderUI'
 import AlertUI from './components/AlertUI'
 import DataFetcher from './functions/DataFetcher'
+import TableUI from './components/TableUI';
+import ChartUI from './components/ChartUI';
 
 function App() {
   const dataFetcherOutput = DataFetcher();
@@ -68,11 +70,25 @@ function App() {
         {/* Gráfico */}
         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
           Elemento: Gráfico
+          <ChartUI
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+            labels={dataFetcherOutput.data?.hourly.time ?? []}
+            values1={dataFetcherOutput.data?.hourly.temperature_2m ?? []}
+            values2={dataFetcherOutput.data?.hourly.wind_speed_10m ?? []}
+          />
         </Grid>
 
         {/* Tabla */}
         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: "none", md: "block" } }}>
           Elemento: Tabla
+          <TableUI 
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+            labels={dataFetcherOutput.data?.hourly.time ?? []}
+            values1={dataFetcherOutput.data?.hourly.temperature_2m ?? []}
+            values2={dataFetcherOutput.data?.hourly.wind_speed_10m ?? []}
+          />
         </Grid>
 
         {/* Información adicional */}
