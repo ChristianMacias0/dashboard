@@ -16,7 +16,7 @@ export default function ChartUI({ loading, error, labels, values1, values2 }: Ch
    return (
       <>
          <Typography variant="h5" component="div">
-            Temperatura y Viento por hora
+            Temperatura vs Viento por hora
          </Typography>
          <LineChart
             height={300}
