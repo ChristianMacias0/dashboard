@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material'
+import { useState } from 'react';
 import SelectorUI from './components/SelectorUI'
 import IndicatorUI from './components/IndicatorUI'
 import HeaderUI from './components/HeaderUI'
@@ -8,7 +9,13 @@ import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
 
 function App() {
-  const dataFetcherOutput = DataFetcher();
+  const [city, setCity] = useState<string>('guayaquil'); // Valor inicial opcional
+
+  const handleCityChange = (newCity: string) => {
+    setCity(newCity);
+  };
+
+  const dataFetcherOutput = DataFetcher(city);
   return (
     <>
       <Grid container spacing={5} justifyContent="center" alignItems="center">
@@ -25,7 +32,7 @@ function App() {
 
         {/* Selector */}
         <Grid size={{ xs: 12, md: 3 }}>
-          <SelectorUI />
+          <SelectorUI onCityChange={handleCityChange} />
         </Grid>
 
         {/* Indicadores */}
