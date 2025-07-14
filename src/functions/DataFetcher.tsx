@@ -7,7 +7,8 @@ interface DataFetcherOutput {
     error: string | null;
 }
 
-// Recibe la ciudad como argumento
+const CACHE_MINUTES = 10; // Vigencia en minutos
+
 export default function DataFetcher(city: string): DataFetcherOutput {
     const [data, setData] = useState<OpenMeteoResponse | null>(null);
     const [loading, setLoading] = useState(true);
@@ -33,6 +34,24 @@ export default function DataFetcher(city: string): DataFetcherOutput {
             return;
         }
 
+        const cacheKey = `openmeteo_${city}`; // Usa backticks para interpolar
+        const cached = localStorage.getItem(cacheKey);
+
+        if (cached) {
+            try {
+                const { timestamp, response } = JSON.parse(cached);
+                const now = Date.now();
+                // Si la cache es válida, úsala
+                if (now - timestamp < CACHE_MINUTES * 60 * 1000) {
+                    setData(response);
+                    setLoading(false);
+                    return;
+                }
+            } catch {
+                // Si hay error en el parseo, ignora la cache
+            }
+        }
+
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,wind_speed_10m&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m&timezone=America%2FChicago`;
 
         const fetchData = async () => {
@@ -43,8 +62,23 @@ export default function DataFetcher(city: string): DataFetcherOutput {
                 }
                 const result: OpenMeteoResponse = await response.json();
                 setData(result);
+                // Guarda en localStorage con timestamp
+                localStorage.setItem(
+                    cacheKey,
+                    JSON.stringify({ timestamp: Date.now(), response: result })
+                );
+                console.log('Guardado xd', cacheKey, result);
             } catch (err: any) {
-                if (err instanceof Error) {
+                if (cached) {
+                    // Si hay error, pero hay cache, úsala como respaldo
+                    try {
+                        const { response } = JSON.parse(cached);
+                        setData(response);
+                        setError("Mostrando datos en caché por error de red.");
+                    } catch {
+                        setError("Ocurrió un error desconocido al obtener los datos.");
+                    }
+                } else if (err instanceof Error) {
                     setError(err.message);
                 } else {
                     setError("Ocurrió un error desconocido al obtener los datos.");
@@ -55,7 +89,7 @@ export default function DataFetcher(city: string): DataFetcherOutput {
         };
 
         fetchData();
-    }, [city]); // Se ejecuta cada vez que cambia la ciudad
+    }, [city]);
 
     return { data, loading, error };
 }
