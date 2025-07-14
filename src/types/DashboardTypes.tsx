@@ -1,4 +1,4 @@
-export interface RootInterface {
+export interface OpenMeteoResponse {
   latitude: number
   longitude: number
   generationtime_ms: number
