@@ -7,10 +7,17 @@ import DataFetcher from './functions/DataFetcher'
 import TableUI from './components/TableUI'
 import ChartUI from './components/ChartUI'
 import { useState } from 'react'
+import { useCohereAssistant } from './functions/CohereAssistant'
 
 function App() {
   const [selectedCity, setSelectedCity] = useState<string>('guayaquil');
   const dataFetcherOutput = DataFetcher(selectedCity);
+  const [userQuery, setUserQuery] = useState('');
+  const { sendQuery, response, loading, error, calls, MAX_CALLS } = useCohereAssistant();
+
+  const handleAsk = () => {
+    sendQuery(userQuery);
+  };
   return (
     <>
       <Grid container spacing={5} justifyContent="center" alignItems="center">
@@ -28,8 +35,8 @@ function App() {
         {/* Selector */}
         <Grid size={{ xs: 12, md: 3 }}>
           <SelectorUI
-          selectedCity={selectedCity}
-          onCityChange={setSelectedCity}
+            selectedCity={selectedCity}
+            onCityChange={setSelectedCity}
           />
         </Grid>
 
@@ -78,15 +85,15 @@ function App() {
             data={
               dataFetcherOutput.data
                 ? {
-                    ...dataFetcherOutput.data,
-                    // Limita a las últimas 24 horas si hay más datos
-                    hourly: {
-                      ...dataFetcherOutput.data.hourly,
-                      time: dataFetcherOutput.data.hourly.time.slice(-50),
-                      temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
-                      wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
-                    },
-                  }
+                  ...dataFetcherOutput.data,
+                  // Limita a las últimas 24 horas si hay más datos
+                  hourly: {
+                    ...dataFetcherOutput.data.hourly,
+                    time: dataFetcherOutput.data.hourly.time.slice(-50),
+                    temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                    wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                  },
+                }
                 : null
             }
             loading={dataFetcherOutput.loading}
@@ -100,15 +107,15 @@ function App() {
             data={
               dataFetcherOutput.data
                 ? {
-                    ...dataFetcherOutput.data,
-                    // Limita a las últimas 24 filas
-                    hourly: {
-                      ...dataFetcherOutput.data.hourly,
-                      time: dataFetcherOutput.data.hourly.time.slice(-50),
-                      temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
-                      wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
-                    },
-                  }
+                  ...dataFetcherOutput.data,
+                  // Limita a las últimas 24 filas
+                  hourly: {
+                    ...dataFetcherOutput.data.hourly,
+                    time: dataFetcherOutput.data.hourly.time.slice(-50),
+                    temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                    wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                  },
+                }
                 : null
             }
             loading={dataFetcherOutput.loading}
@@ -116,9 +123,27 @@ function App() {
           />
         </Grid>
 
-        {/* Información adicional */}
+        {/* Asistente del Clima */}
         <Grid size={{ xs: 12, md: 12 }}>
-          Elemento: Información adicional
+          <div style={{ margin: 24 }}>
+            <h3>Asistente de Clima (Cohere)</h3>
+            <input
+              type="text"
+              value={userQuery}
+              onChange={e => setUserQuery(e.target.value)}
+              placeholder="Haz una pregunta sobre el clima..."
+              style={{ width: 300, marginRight: 8 }}
+            />
+            <button onClick={handleAsk} disabled={loading || calls >= MAX_CALLS}>
+              Consultar
+            </button>
+            <div>
+              {loading && <p>Consultando a Cohere...</p>}
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+              {response && <p><strong>Respuesta:</strong> {response}</p>}
+              <p>Consultas usadas: {calls} / {MAX_CALLS}</p>
+            </div>
+          </div>
         </Grid>
 
       </Grid>
