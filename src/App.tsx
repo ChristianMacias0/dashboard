@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import SelectorUI from './components/SelectorUI'
 import IndicatorUI from './components/IndicatorUI'
 import HeaderUI from './components/HeaderUI'
@@ -19,7 +19,14 @@ function App() {
     sendQuery(userQuery);
   };
   return (
-    <>
+
+    <Box
+      sx={{
+        backgroundColor: '#0d0b38',
+        minHeight: '100vh',
+        paddingBottom: 4,
+      }}
+    >
       <Grid container spacing={5} justifyContent="center" alignItems="center">
 
         {/* Encabezado */}
@@ -147,7 +154,7 @@ function App() {
         </Grid>
 
       </Grid>
-    </>
+    </Box>
 
   )
 }
