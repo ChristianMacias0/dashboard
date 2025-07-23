@@ -1,0 +1,52 @@
+# Nombre del Workflow
+name: Deploy to GitHub Pages
+
+# Se ejecuta cada vez que haces un push a la rama 'main'
+on:
+  push:
+    branches:
+      - main
+
+# Permisos para que el workflow pueda escribir en el despliegue de Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Puedes usar la versión de Node que prefieras
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        # Este comando ejecuta 'vite build' y gracias a tu 'vite.config.js',
+        # usará la base '/dashboard/' para generar los archivos correctos.
+        run: npm run build
+
+      - name: Upload production-ready build files
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './dist' # Sube el contenido de la carpeta 'dist'
+
+  deploy:
+    # El trabajo de despliegue depende de que el de 'build' termine correctamente
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # La URL de la página desplegada
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
