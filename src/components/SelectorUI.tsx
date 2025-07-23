@@ -3,6 +3,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
 interface SelectorUIProps {
   selectedCity: string;
@@ -24,13 +25,18 @@ export default function SelectorUI(props: SelectorUIProps) {
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="city-select-label">Ciudad</InputLabel>
+      <InputLabel id="city-select-label" sx={{ color: '#fff' }}>Ciudad</InputLabel>
       <Select
         labelId="city-select-label"
         id="city-simple-select"
         label="Ciudad"
         value={cityInput}
         onChange={handleChange}
+        sx={{
+          background: 'rgba(255,255,255,0.9)',
+          borderRadius: 2,
+          mb: 1,
+        }}
       >
         <MenuItem value="" disabled>
           <em>Seleccione una ciudad</em>
@@ -41,12 +47,12 @@ export default function SelectorUI(props: SelectorUIProps) {
         <MenuItem value={"cuenca"}>Cuenca</MenuItem>
       </Select>
       {cityInput && (
-        <p>
+        <Typography variant="body2" sx={{ color: '#fff', mt: 1 }}>
           Información del clima en{' '}
           <span style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
             {cityInput}
           </span>
-        </p>
+        </Typography>
       )}
     </FormControl>
   );

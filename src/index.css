@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(180deg, #18143a 0%, #2e2b5a 100%);
 }
 
 h1 {
@@ -64,5 +65,25 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+@media (max-width: 900px) {
+  #root {
+    padding: 0.5rem !important;
+  }
+  .MuiPaper-root, .MuiBox-root {
+    border-radius: 12px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 0.2rem !important;
+  }
+  .MuiTypography-h4 {
+    font-size: 1.5rem !important;
+  }
+  .MuiTypography-subtitle1 {
+    font-size: 1rem !important;
   }
 }

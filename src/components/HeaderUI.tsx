@@ -1,49 +1,46 @@
-import { Box, Typography} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 
 const HeaderUI = () => {
     return (
         <Box
             sx={{
-                backgroundColor: '#0d0b38', // Fondo exterior azul oscuro
-                padding: 2,
+                background: 'linear-gradient(90deg, #6366f1 0%, #9333ea 100%)',
+                borderRadius: 4,
+                p: { xs: 2, md: 4 },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: { xs: 'center', md: 'flex-start' },
+                mb: 2,
+                boxShadow: 3,
+                flexDirection: { xs: 'column', md: 'row' },
+                gap: 2,
             }}
         >
-            <Box
+            <Typography
+                variant="h4"
                 sx={{
-                    backgroundColor: '#f0f4ff', // Fondo claro de la tarjeta
-                    borderRadius: '12px',
-                    padding: 2,
+                    fontWeight: 800,
+                    color: '#fff',
                     display: 'flex',
-                    flexDirection: 'column', // Fuerza columna para ambos textos
-                    alignItems: { xs: 'flex-start', sm: 'flex-start' },
-                    gap: 0,
+                    alignItems: 'center',
+                    gap: 1,
                 }}
             >
-
-
-                <Typography
-                    variant="h6"
-                    sx={{
-                        fontWeight: 600,
-                        fontSize: '1.25rem',
-                        color: '#4f46e5', // Morado
-                        display: 'inline',
-                    }}
-                >
-                    Dashboard <span style={{ color: '#9333ea' }}>Climático</span>
-                </Typography>
-                
-                <Typography
-                    variant="body2"
-                    sx={{
-                        color: '#4b5563',
-                        marginTop: 1,
-                    }}
-                >
-                    Monitoreo avanzado en tiempo real • Pronósticos precisos • Análisis detallado
-                </Typography>
-            </Box>
+                {/* Usa un emoji estándar para máxima compatibilidad */}
+                <span role="img" aria-label="cloud" style={{ fontSize: 36 }}>☁️</span>
+                Dashboard <span style={{ color: '#fbbf24' }}>Climático</span>
+            </Typography>
+            <Typography
+                variant="subtitle1"
+                sx={{
+                    color: '#e0e7ff',
+                    fontWeight: 400,
+                    mt: { xs: 1, md: 0 },
+                }}
+            >
+                Monitoreo avanzado en tiempo real • Pronósticos precisos • Análisis detallado
+            </Typography>
         </Box>
     );
 };
