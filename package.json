@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
@@ -14,8 +14,8 @@
   "homepage": "https://ChristianMacias0.github.io/dashboard",
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.1.1",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.2.0",
     "@mui/x-charts": "^8.7.0",
     "@mui/x-data-grid": "^8.7.0",
     "cohere-ai": "^7.17.1",

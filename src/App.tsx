@@ -43,10 +43,12 @@ function App() {
             Alertas Meteorológicas Activas
           </Typography>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={12} md={6}>
+            {/* 'item' prop removida */}
+            <Grid xs={12} sm={12} md={6}>
               <AlertUI description="Alerta de tormenta: Se esperan lluvias intensas en las próximas 2 horas" />
             </Grid>
-            <Grid item xs={12} sm={12} md={6}>
+            {/* 'item' prop removida */}
+            <Grid xs={12} sm={12} md={6}>
               <AlertUI description="Advertencia: Posibles tormentas eléctricas entre las 16:00 y 20:00" />
             </Grid>
           </Grid>
@@ -57,7 +59,8 @@ function App() {
       <Box sx={{ maxWidth: 1200, mx: 'auto', mb: 3, width: '100%' }}>
         <Grid container spacing={2}>
           {/* Selector */}
-          <Grid item xs={12} sm={6} md={3}>
+          {/* 'item' prop removida */}
+          <Grid xs={12} sm={6} md={3}>
             <Paper elevation={3} sx={{ p: 2, borderRadius: 3, background: 'linear-gradient(135deg, #6d6afc 0%, #a7bfff 100%)', color: '#fff' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
                 Ubicación Actual
@@ -69,13 +72,15 @@ function App() {
             </Paper>
           </Grid>
           {/* Indicadores */}
-          <Grid item xs={12} sm={6} md={9}>
+          {/* 'item' prop removida */}
+          <Grid xs={12} sm={6} md={9}>
             <Grid container spacing={2}>
-              {dataFetcherOutput.loading && <Grid item xs={12}><Typography>Cargando datos...</Typography></Grid>}
-              {dataFetcherOutput.error && <Grid item xs={12}><Typography color="error">Error: {dataFetcherOutput.error}</Typography></Grid>}
+              {dataFetcherOutput.loading && <Grid xs={12}><Typography>Cargando datos...</Typography></Grid>}
+              {dataFetcherOutput.error && <Grid xs={12}><Typography color="error">Error: {dataFetcherOutput.error}</Typography></Grid>}
               {dataFetcherOutput.data && (
                 <>
-                  <Grid item xs={12} sm={6} md={3}>
+                  {/* 'item' prop removida */}
+                  <Grid xs={12} sm={6} md={3}>
                     <IndicatorUI
                       title='Temperatura'
                       description={dataFetcherOutput.data.current.temperature_2m + "°C"}
@@ -84,7 +89,8 @@ function App() {
                       extra={`Sensación: ${dataFetcherOutput.data.current.apparent_temperature}°C`}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  {/* 'item' prop removida */}
+                  <Grid xs={12} sm={6} md={3}>
                     <IndicatorUI
                       title='Humedad'
                       description={dataFetcherOutput.data.current.relative_humidity_2m + "%"}
@@ -93,7 +99,8 @@ function App() {
                       extra={`Punto rocío: ${Math.round(dataFetcherOutput.data.current.temperature_2m - ((100 - dataFetcherOutput.data.current.relative_humidity_2m) / 5))}°C`}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  {/* 'item' prop removida */}
+                  <Grid xs={12} sm={6} md={3}>
                     <IndicatorUI
                       title='Viento'
                       description={dataFetcherOutput.data.current.wind_speed_10m + " km/h"}
@@ -102,7 +109,8 @@ function App() {
                       extra="Dirección: NO"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  {/* 'item' prop removida */}
+                  <Grid xs={12} sm={6} md={3}>
                     <IndicatorUI
                       title='Presión'
                       description="1013 hPa"
@@ -122,7 +130,8 @@ function App() {
       <Box sx={{ maxWidth: 1200, mx: 'auto', mb: 3 }}>
         <Grid container spacing={2}>
           {/* Gráfico */}
-          <Grid item xs={12} sm={12} md={8}>
+          {/* 'item' prop removida */}
+          <Grid xs={12} sm={12} md={8}>
             <Paper elevation={3} sx={{ p: 2, borderRadius: 3, background: 'linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%)' }}>
               <Typography variant="h6" sx={{ color: '#4f46e5', fontWeight: 700, mb: 2 }}>
                 Tendencias Climáticas - Últimas 24 Horas
@@ -147,7 +156,8 @@ function App() {
             </Paper>
           </Grid>
           {/* Consejos */}
-          <Grid item xs={12} sm={12} md={4}>
+          {/* 'item' prop removida */}
+          <Grid xs={12} sm={12} md={4}>
             <Paper elevation={3} sx={{ p: 2, borderRadius: 3, background: 'linear-gradient(135deg, #34d399 0%, #6ee7b7 100%)', color: '#065f46' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
                 Consejos Inteligentes
