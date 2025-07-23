@@ -1,34 +1,161 @@
+import { Box, Grid } from '@mui/material'
+import SelectorUI from './components/SelectorUI'
+import IndicatorUI from './components/IndicatorUI'
+import HeaderUI from './components/HeaderUI'
+import AlertUI from './components/AlertUI'
+import DataFetcher from './functions/DataFetcher'
+import TableUI from './components/TableUI'
+import ChartUI from './components/ChartUI'
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useCohereAssistant } from './functions/CohereAssistant'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedCity, setSelectedCity] = useState<string>('guayaquil');
+  const dataFetcherOutput = DataFetcher(selectedCity);
+  const [userQuery, setUserQuery] = useState('');
+  const { sendQuery, response, loading, error, calls, MAX_CALLS } = useCohereAssistant();
 
+  const handleAsk = () => {
+    sendQuery(userQuery);
+  };
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+    <Box
+      sx={{
+        backgroundColor: '#0d0b38',
+        minHeight: '100vh',
+        paddingBottom: 4,
+      }}
+    >
+      <Grid container spacing={5} justifyContent="center" alignItems="center">
+
+        {/* Encabezado */}
+        <Grid size={{ xs: 12, md: 12 }}>
+          <HeaderUI />
+        </Grid>
+
+        {/* Alertas */}
+        <Grid container justifyContent="right" alignItems="center" size={{ xs: 12, md: 12 }}>
+          <AlertUI description="No se preveen lluvias" />
+        </Grid>
+
+        {/* Selector */}
+        <Grid size={{ xs: 12, md: 3 }}>
+          <SelectorUI
+            selectedCity={selectedCity}
+            onCityChange={setSelectedCity}
+          />
+        </Grid>
+
+        {/* Indicadores */}
+        <Grid container size={{ xs: 12, md: 9 }}>
+          {/* Renderizado condicional de los datos obtenidos */}
+
+          {dataFetcherOutput.loading && <p>Cargando datos...</p>}
+          {dataFetcherOutput.error && <p>Error: {dataFetcherOutput.error}</p>}
+          {dataFetcherOutput.data && (
+            <>
+
+              {/* Indicadores con datos obtenidos */}
+
+              <Grid size={{ xs: 12, md: 3 }} >
+                <IndicatorUI
+                  title='Temperatura (2m)'
+                  description={dataFetcherOutput.data.current.temperature_2m + " " + dataFetcherOutput.data.current_units.temperature_2m} />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 3 }}>
+                <IndicatorUI
+                  title='Temperatura aparente'
+                  description={dataFetcherOutput.data.current.apparent_temperature + " " + dataFetcherOutput.data.current_units.apparent_temperature} />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 3 }}>
+                <IndicatorUI
+                  title='Velocidad del viento'
+                  description={dataFetcherOutput.data.current.wind_speed_10m + " " + dataFetcherOutput.data.current_units.wind_speed_10m} />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 3 }}>
+                <IndicatorUI
+                  title='Humedad relativa'
+                  description={dataFetcherOutput.data.current.relative_humidity_2m + " " + dataFetcherOutput.data.current_units.relative_humidity_2m} />
+              </Grid>
+
+            </>
+          )}
+        </Grid>
+
+        {/* Gráfico */}
+        <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
+          <ChartUI
+            data={
+              dataFetcherOutput.data
+                ? {
+                  ...dataFetcherOutput.data,
+                  // Limita a las últimas 24 horas si hay más datos
+                  hourly: {
+                    ...dataFetcherOutput.data.hourly,
+                    time: dataFetcherOutput.data.hourly.time.slice(-50),
+                    temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                    wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                  },
+                }
+                : null
+            }
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+          />
+        </Grid>
+
+        {/* Tabla */}
+        <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: "none", md: "block" } }}>
+          <TableUI
+            data={
+              dataFetcherOutput.data
+                ? {
+                  ...dataFetcherOutput.data,
+                  // Limita a las últimas 24 filas
+                  hourly: {
+                    ...dataFetcherOutput.data.hourly,
+                    time: dataFetcherOutput.data.hourly.time.slice(-50),
+                    temperature_2m: dataFetcherOutput.data.hourly.temperature_2m.slice(-50),
+                    wind_speed_10m: dataFetcherOutput.data.hourly.wind_speed_10m.slice(-50),
+                  },
+                }
+                : null
+            }
+            loading={dataFetcherOutput.loading}
+            error={dataFetcherOutput.error}
+          />
+        </Grid>
+
+        {/* Asistente del Clima */}
+        <Grid size={{ xs: 12, md: 12 }}>
+          <div style={{ margin: 24 }}>
+            <h3>Asistente de Clima (Cohere)</h3>
+            <input
+              type="text"
+              value={userQuery}
+              onChange={e => setUserQuery(e.target.value)}
+              placeholder="Haz una pregunta sobre el clima..."
+              style={{ width: 300, marginRight: 8 }}
+            />
+            <button onClick={handleAsk} disabled={loading || calls >= MAX_CALLS}>
+              Consultar
+            </button>
+            <div>
+              {loading && <p>Consultando a Cohere...</p>}
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+              {response && <p><strong>Respuesta:</strong> {response}</p>}
+              <p>Consultas usadas: {calls} / {MAX_CALLS}</p>
+            </div>
+          </div>
+        </Grid>
+
+      </Grid>
+    </Box>
+
   )
 }
 

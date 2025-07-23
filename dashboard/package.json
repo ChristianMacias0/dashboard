@@ -7,20 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
-  "homepage": "https://ChristianMacias0.github.io/dashboard",
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.1.1",
-    "@mui/x-charts": "^8.7.0",
-    "@mui/x-data-grid": "^8.7.0",
-    "cohere-ai": "^7.17.1",
-    "install": "^0.13.0",
-    "npm": "^11.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -32,11 +21,9 @@
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
-    "gh-pages": "^6.3.0",
     "globals": "^16.0.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5",
-    "vite-plugin-pwa": "^1.0.1"
+    "vite": "^6.3.5"
   }
 }
