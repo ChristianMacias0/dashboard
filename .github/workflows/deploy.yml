@@ -23,30 +23,29 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Puedes usar la versión de Node que prefieras
+          node-version: '18'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        # Este comando ejecuta 'vite build' y gracias a tu 'vite.config.js',
-        # usará la base '/dashboard/' para generar los archivos correctos.
         run: npm run build
 
       - name: Upload production-ready build files
-        uses: actions/upload-pages-artifact@v2
+        # Aquí está el cambio principal: de @v2 a @v3
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Sube el contenido de la carpeta 'dist'
+          path: './dist'
 
   deploy:
-    # El trabajo de despliegue depende de que el de 'build' termine correctamente
     needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }} # La URL de la página desplegada
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        # Y aquí actualizamos a @v4
+        uses: actions/deploy-pages@v4
